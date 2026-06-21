@@ -28,4 +28,4 @@ const isAuthenticated = async (re, res, next) => {
     }
 }
 
-export default isAuthenticated;
+export default isAuthenticated

@@ -1,3 +1,4 @@
+
 import dns from "dns";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
@@ -11,6 +12,7 @@ import userRoute from "./routes/user.route.js";
 dotenv.config({});
 const app=express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 const corsOptions={
@@ -22,7 +24,18 @@ app.use(cors(corsOptions));
 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT,()=>{
+
+app.use("/api/v1/user",userRoute);
+
+app.get("/", (req, res) => {
+    res.send("Server is alive");
+});
+ 
+
+
+const server = app.listen(PORT, () => {
+    
     connectDB();
-    console.log(`server running on ${PORT}`);
-})
+    console.log(`Server running on ${PORT}`);
+});
+
