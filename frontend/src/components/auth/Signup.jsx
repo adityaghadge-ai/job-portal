@@ -4,10 +4,12 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Button } from "../ui/button";
+import { USER_API_END_POINT } from '@/utils/constant'
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
+
 
 const Signup = () => {
  const [input, setInput] = useState({
@@ -31,7 +33,7 @@ const navigate=useNavigate();
 
   const submitHandler=async(e)=>{
     e.preventDefault();
-    const formData=new formData();
+    const formData=new FormData();
     formData.append("fullname",input.fullname);
       formData.append("email",input.email);
         formData.append("phoneNumber",input.phoneNumber);
@@ -39,7 +41,7 @@ const navigate=useNavigate();
             formData.append("role",input.role);
 
             if(input.file){
-              formData=append("file",input.file);
+             formData.append("file", input.file);
             }
 
     try {
@@ -56,7 +58,7 @@ const navigate=useNavigate();
 
     } catch (error) {
           console.log(error);
-          toast.error(error.response.data.message);
+         toast.error(error.response?.data?.message);
     }
 
 
