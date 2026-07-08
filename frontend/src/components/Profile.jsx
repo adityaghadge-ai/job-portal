@@ -25,8 +25,8 @@ const Profile = () => {
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24">
               <AvatarImage
-                src="https://thfvnext.bing.com/th/id/OIP.zPZ5iEhi91xrNkVh7cS0WwHaHa?w=205&h=205&c=7&r=0&o=7&cb=thfvnextfalcon3&pid=1.7&rm=3"
-                alt="profile"
+                src={user?.profile?.profilePhoto}
+                alt="Profile Photo"
               />
             </Avatar>
             <div>

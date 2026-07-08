@@ -56,7 +56,7 @@ toast.success(res.data.message);
             <PopoverTrigger asChild>
               <Avatar className="cursor-pointer">
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src={user?.profile?.profilePhoto}
                   alt="@shadcn"
                 />
               </Avatar>
@@ -66,13 +66,13 @@ toast.success(res.data.message);
               <div className='flex gap-4 space-y-2'>
               <Avatar className="cursor-pointer">
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src={user?.profile?.profilePhoto}
                   alt="@shadcn"
                 />
               </Avatar>
               <div>
-                 <h4 className='font-medium'>Aditya Ghadge</h4>
-                 <p className='text-sm textmuted-foreground'>Lorem ipsum dolor sit amet.</p>
+                 <h4 className='font-medium'>{user?.fullname}</h4>
+                 <p className='text-sm textmuted-foreground'>{user?.profile?.bio}</p>
               </div>
               
               </div>
