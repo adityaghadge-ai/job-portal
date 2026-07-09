@@ -5,7 +5,8 @@ import { Bookmark } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { useNavigate } from "react-router-dom";
 
-const Job = () => {
+const Job = (props) => {
+  const { job } = props;
   const navigate = useNavigate();
   const jobId = "fgbujhsdfjdjkf";
   return (
@@ -24,34 +25,31 @@ const Job = () => {
           </Avatar>
         </Button>
         <div>
-          <h1 className="font-medium text-lg">Company Name</h1>
+          <h1 className="font-medium text-lg">{job?.company?.name}</h1>
           <p className="text-sm text-gray-500">India</p>
         </div>
       </div>
       <div>
-        <h1 className="font-bold text-lg my-2">Title</h1>
+        <h1 className="font-bold text-lg my-2">{job?.title}</h1>
         <p className="text-sm text-gray-600">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nostrum,
-          molestias! Recusandae rem minus soluta dolorem fugiat, veritatis
-          laudantium vero eos.
+          {job?.description}
         </p>
       </div>
       <div className="flex items-center gap-2 mt-4">
         <Badge className={"text-blue-700 font-bold"} variant="ghost">
-          {" "}
-          Positions
+         { job?.position}
         </Badge>
         <Badge className={"text-[#F83002] font-bold"} variant="ghost">
-          Part Time{" "}
+          {job?.jobType}
         </Badge>
         <Badge className={"text-[#7209b7] font-bold"} variant="ghost">
-          4 LPA
+        {job?.salary} LPA
         </Badge>
       </div>
 
       <div className="flex items-center gap-4 mt-4">
         <Button
-          onClick={() => navigate(`/description/${jobId}`)}
+          onClick={() => navigate(`/description/${job?._id}`)}
           variant="outline"
         >
           Details
