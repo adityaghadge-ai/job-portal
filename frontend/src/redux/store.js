@@ -14,7 +14,7 @@ import {
 import createWebStorage from "redux-persist/es/storage/createWebStorage";
 
 const storage = createWebStorage("local");
-// import companySlice from "./companySlice";
+import companySlice from "./companySlice";
 // import applicationSlice from "./applicationSlice";
 
 const persistConfig = {
@@ -26,7 +26,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     auth:authSlice,
     job:jobSlice,
-    // company:companySlice,
+    company:companySlice,
     // application:applicationSlice
 })
 
