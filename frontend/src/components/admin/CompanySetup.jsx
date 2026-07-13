@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../shared/Navbar";
 import { Button } from "../ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import axios from "axios";
+import { COMPANY_API_END_POINT } from "@/utils/constant";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const CompanySetup = () => {
   const [input, setInput] = useState({
@@ -13,7 +18,11 @@ const CompanySetup = () => {
     location: "",
     file: null,
   });
+
+  const {singleCompany}=useSelector(store=>store.company);
 const [loading,setLoading]=useState(false);
+const params=useParams();
+const navigate=useNavigate();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -35,15 +44,43 @@ formData.append("location",input.location);
 if(input.file){
     formData.append("file",input.file);
 }
+try {
+    setLoading(true);
+    const res=await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`,formData,{
+        headers:{
+            'Content-Type':'multipart/form-data'
+        },
+        withCredentials:true
+    });
+    if(res.data.success){
+        toast.success(res.data.message);
+        navigate("/admin/companies");
+    }
+} catch (error) {
+    console.log(error);
+    toast.error(error.response.data.message);
+} finally{
+    setLoading(false);
+}
 
   }
+
+  useEffect(()=>{
+    setInput({
+        name:singleCompany.name || "",
+    description: singleCompany.description || "",
+    website: singleCompany.website || "",
+    location: singleCompany.location || "",
+    file: singleCompany.file || null,
+    })
+  },[singleCompany])
   return (
     <div>
       <Navbar />
       <div className="max-w-xl mx-auto my-10 ">
         <form onSubmit={submitHandler}>
           <div className="flex items-center gap-5 p-8 ">
-            <Button
+            <Button onClick={()=>navigate("/admin/companies")}
               variant="outline"
               className="flex item-center gap-2 text-gray-500 hover:text-black font-semibold"
             >
@@ -105,7 +142,20 @@ if(input.file){
               />
             </div>
           </div>
-          <Button type="submit" className="bg-black text-white hover:bg-gray-700 w-full mt-8 ">Update </Button>
+          
+            {loading ? (
+            <Button className="w-full my-4">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please Waitt..
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full my-4 bg-black text-white hover:bg-gray-800"
+            >
+              Update 
+            </Button>
+          )}
         </form>
       </div>
     </div>
