@@ -8,9 +8,10 @@ import useGetAllCompanies from '@/hooks/useGetAllCompanies'
 import { useDispatch } from 'react-redux'
 import { setSearchCompanyByText } from '@/redux/companySlice'
 import AdminJobsTable from './AdminJobsTable'
+import useGetAllAdminJobs from '@/hooks/useGetAllAdminJobs'
 
 const AdminJobs = () => {
-  
+  useGetAllAdminJobs();
   const [input,setInput]=useState("");
 
     const navigate=useNavigate();
