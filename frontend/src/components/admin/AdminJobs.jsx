@@ -4,11 +4,12 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import CompaniesTable from './CompaniesTable'
 import { useNavigate } from 'react-router-dom'
-import useGetAllCompanies from '@/hooks/useGetAllCompanies'
+
 import { useDispatch } from 'react-redux'
 import { setSearchCompanyByText } from '@/redux/companySlice'
 import AdminJobsTable from './AdminJobsTable'
 import useGetAllAdminJobs from '@/hooks/useGetAllAdminJobs'
+import { setSearchJobByText } from '@/redux/jobSlice'
 
 const AdminJobs = () => {
   useGetAllAdminJobs();
@@ -17,7 +18,7 @@ const AdminJobs = () => {
     const navigate=useNavigate();
     const dispatch=useDispatch();
     useEffect(()=>{
-dispatch(setSearchCompanyByText(input));
+dispatch(setSearchJobByText(input));
     },[input]);
   return (
     <div>
@@ -26,11 +27,11 @@ dispatch(setSearchCompanyByText(input));
     <div className="flex items-center justify-between my-5">
    <Input
     className="w-fit border border-gray-300 focus-visible:ring-0 focus-visible:border-black"
-    placeholder="Filter By Name"
+    placeholder="Filter By Name, Role "
     onChange={(e)=>setInput(e.target.value)}
   />
 
-  <Button onClick={()=>navigate("/admin/companies/create")} className="bg-black text-white hover:bg-gray-800">
+  <Button onClick={()=>navigate("/admin/jobs/create")} className="bg-black text-white hover:bg-gray-800">
     New Job
   </Button>
     </div>
