@@ -3,7 +3,7 @@ import Navbar from './shared/Navbar'
 import FilterCard from './FilterCard'
 import Job from './Job'
 import { useSelector } from 'react-redux';
-import { setSearchedQuery } from '@/redux/jobSlice';
+import { motion } from 'framer-motion';
 
 // const jobsArray=[1,2,3,4,5,6,7,8];
 
@@ -42,9 +42,14 @@ if(searchedQuery){
             
              {
                   filterJobs.map((job)=> (
-                    <div key={job?._id}>
+                    <motion.div 
+                    initial={{opacity:0,x:100}}
+                    animate={{opacity:1,x:0}}
+                    exit={{opacity:0,x:-100}}
+                    transition={{duration:0.3}}
+                    key={job?._id}>
                         <Job job={job}/>
-                    </div>
+                    </motion.div>
                   ))
             }
            </div>
