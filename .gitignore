@@ -13,7 +13,7 @@ dist/
 build/
 frontend/dist/
 backend/dist/
-frontend/src/utils
+
 
 # Logs
 *.log
