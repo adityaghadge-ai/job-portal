@@ -11,7 +11,7 @@ const ApplicantsTable = () => {
     const {applicants}=useSelector(store=>store.application);
     const statusHandler=async(status,id)=>{
         try {
-            const res=await axios.post(`${APPLICATION_API_END_POINT}/status/${id}/update`,{status},
+            const res=await axios.post(`https://job-portal-2-1eaf.onrender.com/api/v1/application/status/${id}/update`,{status},
                 {
                 withCredentials:true
             });

@@ -48,7 +48,7 @@ setInput({...input,[e.target.name]:e.target.value});
 
     try {
         setLoading(true);
-        const res=await axios.post(`${USER_API_END_POINT}/profile/update`,formData,{
+        const res=await axios.post("http://localhost:8000/api/v1/application/api/v1/user/profile/update",formData,{
             headers:{
                 "Content-Type":"multipart/form-data"
             },

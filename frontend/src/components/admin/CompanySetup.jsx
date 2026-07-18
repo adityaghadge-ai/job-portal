@@ -49,7 +49,7 @@ if(input.file){
 }
 try {
     setLoading(true);
-    const res=await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`,formData,{
+    const res=await axios.put(`https://job-portal-2-1eaf.onrender.com/api/v1/company/update/${params.id}`,formData,{
         headers:{
             'Content-Type':'multipart/form-data'
         },

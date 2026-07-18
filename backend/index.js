@@ -31,7 +31,7 @@ app.use(cookieParser());
 // CORS
 app.use(
     cors({
-        origin: process.env.CLIENT_URL || "http://localhost:5173",
+        origin: "https://job-portal-2-1eaf.onrender.com",
         credentials: true,
     })
 );
