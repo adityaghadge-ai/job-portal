@@ -28,10 +28,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// CORS
+// CORS configuration supporting local development and production
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:3000",
+    "https://job-portal-2-1eaf.onrender.com",
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(
     cors({
-        origin: "https://job-portal-2-1eaf.onrender.com",
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin) || origin.startsWith("http://localhost:")) {
+                callback(null, true);
+            } else {
+                callback(null, true);
+            }
+        },
         credentials: true,
     })
 );

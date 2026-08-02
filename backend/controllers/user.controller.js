@@ -112,7 +112,7 @@ export const login = async (req, res) => {
             profile: user.profile
         }
 
-        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpsOnly: true, sameSite: 'strict' }).json({
+        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'lax' }).json({
             message: `Welcome back ${user.fullname}`,
             user,
             success: true
@@ -156,7 +156,7 @@ export const updateProfile = async (req, res) => {
             user.profile.skills = skills.split(",");
         }
 
-        // Upload Resume (Optional)
+        // Upload File (Profile Photo or Resume)
         if (req.file) {
             const fileUri = getDataUri(req.file);
 
@@ -167,8 +167,12 @@ export const updateProfile = async (req, res) => {
                 }
             );
 
-            user.profile.resume = cloudResponse.secure_url;
-            user.profile.resumeOriginalName = req.file.originalname;
+            if (req.file.mimetype.startsWith("image/")) {
+                user.profile.profilePhoto = cloudResponse.secure_url;
+            } else {
+                user.profile.resume = cloudResponse.secure_url;
+                user.profile.resumeOriginalName = req.file.originalname;
+            }
         }
 
         await user.save();
