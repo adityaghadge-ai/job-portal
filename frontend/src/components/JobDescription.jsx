@@ -4,17 +4,22 @@ import { Badge } from './ui/badge'
 import { Button } from './ui/button'
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from '@/utils/constant';
+import { APPLICATION_API_END_POINT, JOB_API_END_POINT, AI_API_END_POINT } from '@/utils/constant';
 import { setSingleJob } from '@/redux/jobSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
-import { ArrowLeft, Calendar, MapPin, Briefcase, DollarSign, Users } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Briefcase, DollarSign, Users, Sparkles } from 'lucide-react';
+import AIResumeScannerModal from './AIResumeScannerModal';
 
 const JobDescription = () => {
     const { singleJob } = useSelector(store => store.job);
     const { user } = useSelector(store => store.auth);
     const isIntiallyApplied = singleJob?.applications?.some(application => application.applicant === user?._id) || false;
     const [isApplied, setIsApplied] = useState(isIntiallyApplied);
+
+    const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+    const [aiAnalysis, setAiAnalysis] = useState(null);
+    const [isScanning, setIsScanning] = useState(false);
 
     const params = useParams();
     const jobId = params.id;
@@ -36,6 +41,26 @@ const JobDescription = () => {
             toast.error(error.response?.data?.message || "Failed to apply");
         }
     }
+
+    const handleScanSuitability = async () => {
+        if (!user) {
+            toast.error("Please login to scan your resume suitability.");
+            return;
+        }
+        try {
+            setIsScanning(true);
+            setIsAiModalOpen(true);
+            const res = await axios.get(`${AI_API_END_POINT}/scan-suitability/${jobId}`, { withCredentials: true });
+            if (res.data.success) {
+                setAiAnalysis(res.data.analysis);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response?.data?.message || "Failed to scan resume suitability.");
+        } finally {
+            setIsScanning(false);
+        }
+    };
 
     useEffect(() => {
         const fetchSingleJob = async () => {
@@ -80,17 +105,26 @@ const JobDescription = () => {
                                 </Badge>
                             </div>
                         </div>
-                        <Button
-                            onClick={isApplied ? null : applyJobHandler}
-                            disabled={isApplied}
-                            className={`rounded-xl px-6 py-2.5 text-sm sm:text-base font-semibold shadow-sm transition-all ${
-                                isApplied 
-                                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed border-none' 
-                                    : 'bg-[#7209b7] hover:bg-[#5f32ad] text-white shadow-purple-200'
-                            }`}
-                        >
-                            {isApplied ? 'Already Applied' : 'Apply Now'}
-                        </Button>
+                        <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+                            <Button
+                                onClick={handleScanSuitability}
+                                variant="outline"
+                                className="rounded-xl px-5 py-2.5 text-sm sm:text-base font-semibold border-purple-200 text-[#7209b7] bg-purple-50/50 hover:bg-purple-100 flex items-center gap-2 transition-all"
+                            >
+                                <Sparkles className="w-4 h-4 text-[#7209b7]" /> Check Suitability with AI
+                            </Button>
+                            <Button
+                                onClick={isApplied ? null : applyJobHandler}
+                                disabled={isApplied}
+                                className={`rounded-xl px-6 py-2.5 text-sm sm:text-base font-semibold shadow-sm transition-all ${
+                                    isApplied 
+                                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed border-none' 
+                                        : 'bg-[#7209b7] hover:bg-[#5f32ad] text-white shadow-purple-200'
+                                }`}
+                            >
+                                {isApplied ? 'Already Applied' : 'Apply Now'}
+                            </Button>
+                        </div>
                     </div>
 
                     <h2 className='font-bold text-lg text-gray-900 py-4 border-b border-gray-100'>Job Highlights & Details</h2>
@@ -148,6 +182,15 @@ const JobDescription = () => {
                     </div>
                 </div>
             </div>
+
+            <AIResumeScannerModal
+                isOpen={isAiModalOpen}
+                onClose={() => setIsAiModalOpen(false)}
+                analysis={aiAnalysis}
+                jobTitle={singleJob?.title}
+                isLoading={isScanning}
+                onReScan={handleScanSuitability}
+            />
         </div>
     )
 }
